@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>毛孩星球 🐾 ｜ 最療癒的寵物分享交流平台</title>
+  <!-- 引入可愛且現代感十足的 Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@300..700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- 爪爪漂浮背景背景裝飾 -->
+  <div class="paw-bg-decor"></div>
+
+  <!-- 頂部導覽列 -->
+  <header class="navbar">
+    <div class="brand" onclick="showPage('sharePage')">
+      <div class="brand-icon">🐾</div>
+      <div>
+        <h1>毛孩星球</h1>
+        <p>Pet Sharing Community</p>
+      </div>
+    </div>
+
+    <!-- 桌機版導覽動作 -->
+    <nav class="nav-actions">
+      <button class="nav-btn active" id="nav-sharePage" onclick="showPage('sharePage')">🏠 分享區</button>
+      <button class="nav-btn" id="nav-aboutPage" onclick="showPage('aboutPage')">📖 平台介紹</button>
+      <button class="nav-btn primary-mini" onclick="openPostPage()">＋ 新增貼文</button>
+      <button id="profileNavBtn" class="nav-btn" onclick="openHome()">👤 個人首頁</button>
+      <button id="authNavBtn" class="primary-mini" onclick="showPage('authPage')">🔐 登入 / 註冊</button>
+      <button id="logoutNavBtn" class="danger-mini hidden" onclick="logout()">🚪 登出</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 首頁 / 分享區 -->
+    <section id="sharePage" class="page">
+      <div class="hero animate-pop">
+        <div class="hero-text">
+          <span class="badge">🐶 今日也要分享毛孩可愛日常</span>
+          <h2>把你的寵物故事，分享給所有愛動物的人 🐾</h2>
+          <p>在這裡可以發布貼文、上傳照片、按讚、留言，也可以瀏覽其他使用者的毛孩生活，一起蓋出最溫馨的寵物星球！</p>
+          <div class="hero-actions">
+            <button class="primary-btn" onclick="openPostPage()">＋ 我要發文</button>
+            <button class="secondary-btn" id="heroAuthBtn" onclick="showPage('authPage')">加入星球 🐈</button>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="pet-face-container">
+            <div class="pet-face">🐱</div>
+            <div class="floating-heart">❤️</div>
+          </div>
+          <h3>毛孩今日任務</h3>
+          <p>拍一張最萌的特寫照，寫下今天最療癒的小故事！</p>
+        </div>
+      </div>
+
+      <section class="toolbar">
+        <div class="toolbar-info">
+          <h2>🐾 所有分享貼文</h2>
+          <p id="postCountText" class="count-badge">目前共有 0 篇貼文</p>
+        </div>
+        <div class="filters">
+          <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input id="searchInput" type="text" placeholder="搜尋主題、內容、ID..." oninput="renderAllPosts()" />
+          </div>
+          <div class="select-wrapper">
+            <select id="categoryFilter" onchange="renderAllPosts()">
+              <option value="all">🌈 全部分類</option>
+              <option value="日常分享">日常分享</option>
+              <option value="寵物照片">寵物照片</option>
+              <option value="照顧問題">照顧問題</option>
+              <option value="用品推薦">用品推薦</option>
+              <option value="其他">其他</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- 貼文格柵 -->
+      <div id="allPosts" class="post-grid"></div>
+    </section>
+
+    <!-- 登入 / 註冊 -->
+    <section id="authPage" class="page hidden">
+      <div class="auth-layout">
+        <!-- 登入頁介紹卡 -->
+        <div class="auth-intro">
+          <h2>加入毛孩星球 🐾</h2>
+          <p>建立專屬帳號，記錄你與寶貝的每一個珍貴瞬間，並與萬千寵友分享歡樂！</p>
+          <ul class="intro-features">
+            <li><span>🎨</span> <b>自訂精美個人檔案</b>：上傳最可愛的頭貼與簡介。</li>
+            <li><span>📸</span> <b>分享動人瞬間</b>：發布毛孩的生活照與趣事。</li>
+            <li><span>💬</span> <b>有溫度的互動</b>：隨時按讚、在下方留言討論。</li>
+            <li><span>🎖️</span> <b>解鎖專屬徽章</b>：秀出你的寵物狂熱度！</li>
+          </ul>
+          <div class="auth-illustration">🐾🐕🐈🐰🐹🎨</div>
+        </div>
+
+        <!-- 登入註冊卡 -->
+        <div class="auth-card">
+          <div class="tabs">
+            <button id="loginTab" class="active" onclick="switchAuth('login')">🔑 登入</button>
+            <button id="registerTab" onclick="switchAuth('register')">📝 註冊</button>
+          </div>
+
+          <!-- 登入表單 -->
+          <div id="loginForm" class="form-box">
+            <h3>歡迎回來 🐕</h3>
+            <div class="input-group">
+              <label for="loginId">👤 使用者 ID</label>
+              <input id="loginId" type="text" placeholder="請輸入 ID (例如：catlover)" />
+            </div>
+            
+            <div class="input-group">
+              <label for="loginPassword">🔒 密碼</label>
+              <div class="password-wrapper">
+                <input id="loginPassword" type="password" placeholder="請輸入密碼" />
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPassword')">👁️</button>
+              </div>
+            </div>
+            <button class="primary-btn full" onclick="login()">確認登入 🐾</button>
+          </div>
+
+          <!-- 註冊表單 -->
+          <div id="registerForm" class="form-box hidden">
+            <h3>建立新帳號 🐈</h3>
+            <div class="input-group">
+              <label for="regId">👤 使用者 ID</label>
+              <input id="regId" type="text" placeholder="設定 ID (至少 3 個字元，例如：dogfan)" />
+            </div>
+
+            <div class="input-group">
+              <label for="regName">🏷️ 顯示暱稱</label>
+              <input id="regName" type="text" placeholder="例如：柴柴的傲嬌爸" />
+            </div>
+
+            <div class="input-group">
+              <label for="regPassword">🔒 設定密碼</label>
+              <div class="password-wrapper">
+                <input id="regPassword" type="password" placeholder="請輸入密碼" />
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassword')">👁️</button>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label>🐾 上傳頭貼 (可拖放選取)</label>
+              <div class="upload-zone" onclick="document.getElementById('regAvatar').click()">
+                <input id="regAvatar" type="file" accept="image/*" class="hidden-file-input" />
+                <div id="avatarPreview" class="avatar-preview">🐾</div>
+                <p class="upload-tip">點擊或拖放圖片至此處上傳</p>
+              </div>
+            </div>
+
+            <button class="primary-btn full" onclick="register()">完成註冊 ✨</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 個人首頁 -->
+    <section id="homePage" class="page hidden">
+      <!-- 首頁封面 -->
+      <div class="profile-cover"></div>
+      
+      <div class="profile-header">
+        <div class="profile-avatar-container">
+          <img id="profileAvatar" class="profile-avatar" src="" alt="使用者頭貼" />
+        </div>
+        <div class="profile-info">
+          <div class="profile-name-row">
+            <h2 id="profileName">使用者名稱</h2>
+            <div id="profileBadges" class="badge-container"></div>
+          </div>
+          <p id="profileId">@user</p>
+          
+          <!-- 可點擊原地編輯簡介 -->
+          <div class="bio-section">
+            <span class="bio-title">📝 個人簡介：</span>
+            <p id="profileBio" class="profile-bio" onclick="startEditBio()">點擊此處編輯個人簡介，介紹一下你和毛孩吧... 🐾</p>
+            <div id="bioEditGroup" class="bio-edit-group hidden">
+              <textarea id="bioInput" maxlength="80" placeholder="寫一些介紹吧 (最多 80 字)..."></textarea>
+              <div class="bio-actions">
+                <button class="secondary-btn mini-btn" onclick="cancelEditBio()">取消</button>
+                <button class="primary-btn mini-btn" onclick="saveBio()">保存</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div><strong id="myPostCount">0</strong><span>貼文</span></div>
+            <div><strong id="myLikeCount">0</strong><span>獲得讚數</span></div>
+            <div><strong id="myCommentCount">0</strong><span>留言數</span></div>
+          </div>
+        </div>
+        <div class="profile-actions-header">
+          <button class="primary-btn pulse-anim" onclick="openPostPage()">＋ 新增貼文</button>
+        </div>
+      </div>
+
+      <!-- 首頁貼文頁籤切換 -->
+      <div class="profile-tabs">
+        <button id="tabMyPosts" class="tab-btn active" onclick="switchProfileTab('myPosts')">🐾 我的貼文</button>
+        <button id="tabLikedPosts" class="tab-btn" onclick="switchProfileTab('likedPosts')">❤️ 我按讚的貼文</button>
+      </div>
+
+      <div id="myPosts" class="post-grid"></div>
+    </section>
+
+    <!-- 他人的個人首頁 -->
+    <section id="userPage" class="page hidden">
+      <div class="profile-cover"></div>
+      
+      <div class="profile-header">
+        <div class="profile-avatar-container">
+          <img id="userAvatar" class="profile-avatar" src="" alt="使用者頭貼" />
+        </div>
+        <div class="profile-info">
+          <div class="profile-name-row">
+            <h2 id="userName">使用者名稱</h2>
+            <div id="userBadges" class="badge-container"></div>
+          </div>
+          <p id="userId">@user</p>
+          
+          <div class="bio-section">
+            <span class="bio-title">📝 個人簡介：</span>
+            <p id="userBio" class="profile-bio text-only">這個人很低調，還沒有寫下任何簡介 🐾</p>
+          </div>
+
+          <div class="stats">
+            <div><strong id="userPostCount">0</strong><span>貼文</span></div>
+            <div><strong id="userLikeCount">0</strong><span>獲得讚數</span></div>
+            <div><strong id="userFollowerCount">0</strong><span>粉絲數</span></div>
+          </div>
+        </div>
+        <div class="profile-actions-header">
+          <button id="followBtn" class="primary-btn" onclick="toggleFollow()">🐾 關注</button>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <h3 id="userPostsTitle">他們的分享紀錄</h3>
+      </div>
+      <div id="userPosts" class="post-grid"></div>
+    </section>
+
+    <!-- 發文頁 -->
+    <section id="postPage" class="page hidden">
+      <div class="editor-card animate-pop">
+        <div class="editor-top">
+          <img id="editorAvatar" class="avatar" src="" alt="頭貼" />
+          <div>
+            <strong id="editorName">使用者</strong>
+            <p id="editorId">@user</p>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>🌈 發布分類</label>
+          <!-- 糖果色視覺分類選擇器 -->
+          <div class="category-selector-group">
+            <button type="button" class="category-select-btn active" data-value="日常分享" onclick="selectPostCategory('日常分享', this)">🏡 日常分享</button>
+            <button type="button" class="category-select-btn" data-value="寵物照片" onclick="selectPostCategory('寵物照片', this)">📸 寵物照片</button>
+            <button type="button" class="category-select-btn" data-value="照顧問題" onclick="selectPostCategory('照顧問題', this)">🩺 照顧問題</button>
+            <button type="button" class="category-select-btn" data-value="用品推薦" onclick="selectPostCategory('用品推薦', this)">🍖 用品推薦</button>
+            <button type="button" class="category-select-btn" data-value="其他" onclick="selectPostCategory('其他', this)">🐾 其他</button>
+          </div>
+          <!-- 保持原有 select 作為隱藏值，保障相容性 -->
+          <select id="postCategory" class="hidden">
+            <option value="日常分享" selected>日常分享</option>
+            <option value="寵物照片">寵物照片</option>
+            <option value="照顧問題">照顧問題</option>
+            <option value="用品推薦">用品推薦</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="postTitle">🏷️ 發布主題</label>
+          <input id="postTitle" type="text" placeholder="起一個可愛的標題吧 (例如：我家柴柴今天學會握手！)" maxlength="40" />
+        </div>
+
+        <div class="input-group">
+          <label for="postContent">📝 發布內容</label>
+          <div class="textarea-wrapper">
+            <textarea id="postContent" placeholder="分享你和毛孩的日常、心情、疑問或趣味故事..." maxlength="500"></textarea>
+            <small id="contentCounter">0 / 500</small>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>📸 上傳毛孩照片 (可選)</label>
+          <div class="image-upload-zone" onclick="document.getElementById('postImage').click()">
+            <input id="postImage" type="file" accept="image/*" class="hidden" />
+            <div class="upload-placeholder-content" id="uploadPlaceholderContent">
+              <span class="upload-icon">📷</span>
+              <p>點擊上傳貼文照片，秀出您的萌寵</p>
+            </div>
+            <div class="preview-container">
+              <img id="postImagePreview" class="post-preview hidden" alt="貼文圖片預覽" />
+              <button type="button" id="clearImageBtn" class="clear-img-btn hidden" onclick="clearPostImage(event)">×</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="editor-actions">
+          <button class="secondary-btn" onclick="openHome()">取消</button>
+          <button class="primary-btn" onclick="publishPost()">發布貼文 🚀</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 平台介紹 -->
+    <section id="aboutPage" class="page hidden">
+      <div class="about-card animate-pop">
+        <h2>🐾 關於毛孩星球 (Pet Planet)</h2>
+        <p>「毛孩星球」是一個純淨溫馨的寵物專屬分享平台。在這裡，每隻毛孩都是閃耀的主角！不論是傲嬌的貓咪、忠誠的汪星人，還是活潑的兔子與倉鼠，我們熱切歡迎你記錄與牠們相處的每一個暖心瞬間。</p>
+        
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🎨</div>
+            <h3>日常分享</h3>
+            <p>寫下點點滴滴，記錄毛孩最可愛迷人的逗趣生活。</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">💬</div>
+            <h3>溫暖留言</h3>
+            <p>與志同道合的寵物奴才們深入探討、交流育寵經。</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">❤️</div>
+            <h3>按讚支持</h3>
+            <p>將滿滿的熱情與愛心，送給全網最精采的萌寵貼文。</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🏡</div>
+            <h3>關注追蹤</h3>
+            <p>建立關注關係，隨時掌握人氣星球居民的最新動態。</p>
+          </div>
+        </div>
+
+        <div class="about-footer">
+          <p>毛孩星球 - 用愛連接著每一顆寵物的心。🐾</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 手機版懸浮底部果凍導覽列 -->
+  <nav class="mobile-bottom-nav">
+    <button class="mobile-nav-btn active" id="mob-sharePage" onclick="showPage('sharePage')">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">分享區</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="openPostPage()">
+      <span class="nav-icon">＋</span>
+      <span class="nav-label">發文</span>
+    </button>
+    <button class="mobile-nav-btn" id="mob-homePage" onclick="openHome()">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">首頁</span>
+    </button>
+    <button class="mobile-nav-btn" id="mob-aboutPage" onclick="showPage('aboutPage')">
+      <span class="nav-icon">📖</span>
+      <span class="nav-label">介紹</span>
+    </button>
+  </nav>
+
+  <!-- ========================================== -->
+  <!-- MODAL 元件                                 -->
+  <!-- ========================================== -->
+
+  <!-- 1. 人機圖形驗證碼 Modal -->
+  <div id="captchaModal" class="modal-overlay hidden">
+    <div class="modal-card captcha-card">
+      <div class="captcha-header">
+        <span class="brand-icon mini">🐾</span>
+        <h3>星球安全雙重認證</h3>
+      </div>
+      <div class="captcha-instructions">
+        <p>為了確保帳號安全，請完成排球少年圖片驗證：</p>
+        <div class="captcha-prompt-box">
+          <span class="captcha-prompt-text">請選取所有包含<strong>「日向翔陽 🏐」</strong>的圖片</span>
+        </div>
+      </div>
+      
+      <!-- 3x3 網格圖片 -->
+      <div id="captchaGrid" class="captcha-grid"></div>
+      
+      <div id="captchaError" class="captcha-error hidden">❌ 驗證錯誤，那不是日向翔陽喔！🏐</div>
+      
+      <div class="captcha-actions">
+        <button class="secondary-btn" onclick="closeCaptchaModal()">取消</button>
+        <button class="primary-btn" onclick="verifyCaptcha()">驗證 🐾</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 自訂刪除貼文確認 Modal -->
+  <div id="deleteConfirmModal" class="modal-overlay hidden">
+    <div class="modal-card confirm-card">
+      <div class="confirm-icon">😿</div>
+      <h3>確定要刪除這篇可愛的貼文嗎？</h3>
+      <p>刪除後貼文將永遠消失在毛孩星球上，無法復原喔...嗚嗚...</p>
+      <div class="confirm-actions">
+        <button class="secondary-btn" onclick="closeDeleteConfirmModal()">留下牠 💖</button>
+        <button class="danger-btn" id="confirmDeleteBtn">狠心刪除 🗑️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast 訊息元件 -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
